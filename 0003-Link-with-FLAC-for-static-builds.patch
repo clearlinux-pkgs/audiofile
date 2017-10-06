@@ -1,0 +1,34 @@
+From 82f91311f03378da08b5ce9416e23276270645ce Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue, 5 Jul 2016 23:41:31 -0500
+Subject: [PATCH 3/4] Link with FLAC for static builds.
+
+---
+ ChangeLog       | 5 +++++
+ audiofile.pc.in | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 9a077b6..364e02b 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,0 +1,5 @@
++2016-07-05  Joerg Krause <joerg.krause@embedded.rocks>
++
++	* audiofile.pc.in:
++	Link with FLAC for static builds.
++
+diff --git a/audiofile.pc.in b/audiofile.pc.in
+index ad5956a..43c0f49 100644
+--- a/audiofile.pc.in
++++ b/audiofile.pc.in
+@@ -8,5 +8,5 @@ Description: audiofile
+ Requires:
+ Version: @VERSION@
+ Libs: -L${libdir} -laudiofile
+-Libs.private: -lm
++Libs.private: @FLAC_LIBS@ -lm
+ Cflags: -I${includedir}
+-- 
+2.14.1
+

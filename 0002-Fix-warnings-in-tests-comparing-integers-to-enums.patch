@@ -1,0 +1,131 @@
+From 95109186e864394a2372d3fb0fa252694020e082 Mon Sep 17 00:00:00 2001
+From: Michael Pruett <michael@68k.org>
+Date: Tue, 5 Jul 2016 23:29:41 -0500
+Subject: [PATCH 2/4] Fix warnings in tests comparing integers to enums.
+
+---
+ ChangeLog             | 10 ++++++++++
+ test/Instrument.cpp   |  2 +-
+ test/Loop.cpp         |  4 ++--
+ test/Lossless.h       |  2 +-
+ test/NeXT.cpp         |  4 ++--
+ test/SampleFormat.cpp |  8 ++++----
+ 7 files changed, 26 insertions(+), 16 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 082f7dd..9a077b6 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,0 +1,10 @@
++2016-07-05  Michael Pruett <michael@68k.org>
++
++	* test/Identify.cpp,
++	test/Instrument.cpp,
++	test/Loop.cpp,
++	test/Lossless.h,
++	test/NeXT.cpp,
++	test/SampleFormat.cpp:
++	Fix warnings in tests comparing integers to enums.
++
+diff --git a/test/Instrument.cpp b/test/Instrument.cpp
+index dd4183b..32ac392 100644
+--- a/test/Instrument.cpp
++++ b/test/Instrument.cpp
+@@ -53,7 +53,7 @@ static void testInstrumentParameters(int fileFormat)
+ 	ASSERT_EQ(1, afGetInstIDs(file, NULL));
+ 	int readInstrumentIDs[1] = {0};
+ 	ASSERT_EQ(1, afGetInstIDs(file, readInstrumentIDs));
+-	ASSERT_EQ(AF_DEFAULT_INST, readInstrumentIDs[0]);
++	ASSERT_TRUE(AF_DEFAULT_INST == readInstrumentIDs[0]);
+ 
+ 	EXPECT_EQ(50,
+ 		afGetInstParamLong(file, AF_DEFAULT_INST, AF_INST_MIDI_BASENOTE));
+diff --git a/test/Loop.cpp b/test/Loop.cpp
+index 7b1f09b..123e06a 100644
+--- a/test/Loop.cpp
++++ b/test/Loop.cpp
+@@ -116,8 +116,8 @@ TEST(Loop, AIFF)
+ 	ASSERT_EQ(afGetLoopStart(file, AF_DEFAULT_INST, 2), 3);
+ 	ASSERT_EQ(afGetLoopEnd(file, AF_DEFAULT_INST, 2), 4);
+ 
+-	ASSERT_EQ(afGetLoopTrack(file, AF_DEFAULT_INST, 1), AF_DEFAULT_TRACK);
+-	ASSERT_EQ(afGetLoopTrack(file, AF_DEFAULT_INST, 2), AF_DEFAULT_TRACK);
++	ASSERT_TRUE(afGetLoopTrack(file, AF_DEFAULT_INST, 1) == AF_DEFAULT_TRACK);
++	ASSERT_TRUE(afGetLoopTrack(file, AF_DEFAULT_INST, 2) == AF_DEFAULT_TRACK);
+ 
+ 	ASSERT_EQ(afGetLoopStartFrame(file, AF_DEFAULT_INST, 1),
+ 		markerPositions[0]);
+diff --git a/test/Lossless.h b/test/Lossless.h
+index e8e11e2..488f1ab 100644
+--- a/test/Lossless.h
++++ b/test/Lossless.h
+@@ -95,7 +95,7 @@ static void testLossless(const char *prefix, int fileFormat,
+ 	ASSERT_EQ(compressionFormat, afGetCompression(file, AF_DEFAULT_TRACK));
+ 	int readSampleFormat, readSampleWidth;
+ 	afGetSampleFormat(file, AF_DEFAULT_TRACK, &readSampleFormat, &readSampleWidth);
+-	ASSERT_EQ(AF_SAMPFMT_TWOSCOMP, readSampleFormat);
++	ASSERT_TRUE(AF_SAMPFMT_TWOSCOMP == readSampleFormat);
+ 	ASSERT_EQ(sampleWidth, readSampleWidth);
+ 	ASSERT_EQ(frameCount, afGetFrameCount(file, AF_DEFAULT_TRACK));
+ 
+diff --git a/test/NeXT.cpp b/test/NeXT.cpp
+index 29af877..242788c 100644
+--- a/test/NeXT.cpp
++++ b/test/NeXT.cpp
+@@ -96,7 +96,7 @@ TEST(NeXT, UnspecifiedLength)
+ 
+ 	int sampleFormat, sampleWidth;
+ 	afGetSampleFormat(file, AF_DEFAULT_TRACK, &sampleFormat, &sampleWidth);
+-	EXPECT_EQ(sampleFormat, AF_SAMPFMT_TWOSCOMP);
++	EXPECT_TRUE(sampleFormat == AF_SAMPFMT_TWOSCOMP);
+ 	EXPECT_EQ(sampleWidth, 16);
+ 	EXPECT_EQ(afGetChannels(file, AF_DEFAULT_TRACK), 1);
+ 	EXPECT_EQ(afGetTrackBytes(file, AF_DEFAULT_TRACK),
+@@ -133,7 +133,7 @@ TEST(NeXT, Truncated)
+ 
+ 	int sampleFormat, sampleWidth;
+ 	afGetSampleFormat(file, AF_DEFAULT_TRACK, &sampleFormat, &sampleWidth);
+-	EXPECT_EQ(sampleFormat, AF_SAMPFMT_TWOSCOMP);
++	EXPECT_TRUE(sampleFormat == AF_SAMPFMT_TWOSCOMP);
+ 	EXPECT_EQ(sampleWidth, 16);
+ 	EXPECT_EQ(afGetChannels(file, AF_DEFAULT_TRACK), 1);
+ 	EXPECT_EQ(afGetTrackBytes(file, AF_DEFAULT_TRACK),
+diff --git a/test/SampleFormat.cpp b/test/SampleFormat.cpp
+index dab122c..a7eae82 100644
+--- a/test/SampleFormat.cpp
++++ b/test/SampleFormat.cpp
+@@ -41,7 +41,7 @@ TEST(SampleFormat, NullArguments)
+ 
+ 	int sampleFormat, sampleWidth;
+ 	afGetSampleFormat(file, AF_DEFAULT_TRACK, &sampleFormat, &sampleWidth);
+-	ASSERT_EQ(sampleFormat, AF_SAMPFMT_TWOSCOMP);
++	ASSERT_TRUE(sampleFormat == AF_SAMPFMT_TWOSCOMP);
+ 	ASSERT_EQ(sampleWidth, 16);
+ 
+ 	sampleFormat = -1;
+@@ -51,11 +51,11 @@ TEST(SampleFormat, NullArguments)
+ 
+ 	sampleWidth = -1;
+ 	afGetSampleFormat(file, AF_DEFAULT_TRACK, &sampleFormat, NULL);
+-	ASSERT_EQ(sampleFormat, AF_SAMPFMT_TWOSCOMP);
++	ASSERT_TRUE(sampleFormat == AF_SAMPFMT_TWOSCOMP);
+ 	ASSERT_EQ(sampleWidth, -1);
+ 
+ 	afGetVirtualSampleFormat(file, AF_DEFAULT_TRACK, &sampleFormat, &sampleWidth);
+-	ASSERT_EQ(sampleFormat, AF_SAMPFMT_TWOSCOMP);
++	ASSERT_TRUE(sampleFormat == AF_SAMPFMT_TWOSCOMP);
+ 	ASSERT_EQ(sampleWidth, 16);
+ 
+ 	sampleFormat = -1;
+@@ -65,7 +65,7 @@ TEST(SampleFormat, NullArguments)
+ 
+ 	sampleWidth = -1;
+ 	afGetVirtualSampleFormat(file, AF_DEFAULT_TRACK, &sampleFormat, NULL);
+-	ASSERT_EQ(sampleFormat, AF_SAMPFMT_TWOSCOMP);
++	ASSERT_TRUE(sampleFormat == AF_SAMPFMT_TWOSCOMP);
+ 	ASSERT_EQ(sampleWidth, -1);
+ 
+ 	ASSERT_EQ(afCloseFile(file), 0);
+-- 
+2.14.1
+

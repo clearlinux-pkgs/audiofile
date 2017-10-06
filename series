@@ -1,0 +1,4 @@
+0001-Fix-type-of-test-data-arrays.patch
+0002-Fix-warnings-in-tests-comparing-integers-to-enums.patch
+0003-Link-with-FLAC-for-static-builds.patch
+0004-Fix-undefined-behavior-in-sign-conversion.patch
