@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : audiofile
 Version  : 0.3.6
-Release  : 1
+Release  : 2
 URL      : http://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Source0  : http://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Summary  : A library to handle various audio file formats.
@@ -73,7 +73,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1507321913
+export SOURCE_DATE_EPOCH=1507322070
 %configure
 make V=1  %{?_smp_mflags}
 
@@ -85,7 +85,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1507321913
+export SOURCE_DATE_EPOCH=1507322070
 rm -rf %{buildroot}
 %make_install
 

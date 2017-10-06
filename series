@@ -1,3 +1,4 @@
+# Removed Changelog and test/Identify.cpp from these patches
 0001-Fix-type-of-test-data-arrays.patch
 0002-Fix-warnings-in-tests-comparing-integers-to-enums.patch
 0003-Link-with-FLAC-for-static-builds.patch
