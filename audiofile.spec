@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : audiofile
 Version  : 0.3.6
-Release  : 4
+Release  : 6
 URL      : http://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Source0  : http://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Summary  : A library to handle various audio file formats.
@@ -23,6 +23,16 @@ Patch4: 0004-Fix-undefined-behavior-in-sign-conversion.patch
 Patch5: cve-2017-6837.patch
 Patch6: cve-2017-6838.patch
 Patch7: cve-2017-6839.patch
+Patch8: cve-2017-6832.nopatch
+Patch9: cve-2017-6833.nopatch
+Patch10: cve-2017-6834.nopatch
+Patch11: cve-2017-6835.nopatch
+Patch12: cve-2017-6836.nopatch
+Patch13: cve-2017-6827.nopatch
+Patch14: cve-2017-6828.nopatch
+Patch15: cve-2017-6829.patch
+Patch16: cve-2017-6830.nopatch
+Patch17: cve-2017-6831.patch
 
 %description
 The Audio File Library provides an elegant API for accessing a variety
@@ -73,13 +83,15 @@ lib components for the audiofile package.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch15 -p1
+%patch17 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1507397197
+export SOURCE_DATE_EPOCH=1507400543
 export CFLAGS="$CFLAGS -fstack-protector-strong "
 export FCFLAGS="$CFLAGS -fstack-protector-strong "
 export FFLAGS="$CFLAGS -fstack-protector-strong "
@@ -95,7 +107,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1507397197
+export SOURCE_DATE_EPOCH=1507400543
 rm -rf %{buildroot}
 %make_install
 
