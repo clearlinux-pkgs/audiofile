@@ -3,3 +3,6 @@
 0002-Fix-warnings-in-tests-comparing-integers-to-enums.patch
 0003-Link-with-FLAC-for-static-builds.patch
 0004-Fix-undefined-behavior-in-sign-conversion.patch
+cve-2017-6837.patch
+cve-2017-6838.patch
+cve-2017-6839.patch
