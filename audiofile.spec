@@ -5,15 +5,16 @@
 %define keepstatic 1
 Name     : audiofile
 Version  : 0.3.6
-Release  : 10
+Release  : 11
 URL      : http://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Source0  : http://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Summary  : A library to handle various audio file formats.
 Group    : Development/Tools
 License  : GPL-2.0 LGPL-2.1
-Requires: audiofile-bin
-Requires: audiofile-lib
-Requires: audiofile-doc
+Requires: audiofile-bin = %{version}-%{release}
+Requires: audiofile-lib = %{version}-%{release}
+Requires: audiofile-license = %{version}-%{release}
+Requires: audiofile-man = %{version}-%{release}
 BuildRequires : alsa-lib-dev
 BuildRequires : pkgconfig(flac)
 Patch1: 0001-Fix-type-of-test-data-arrays.patch
@@ -33,6 +34,7 @@ Patch14: cve-2017-6828.nopatch
 Patch15: cve-2017-6829.patch
 Patch16: cve-2017-6830.nopatch
 Patch17: cve-2017-6831.patch
+Patch18: CVE-2018-13440.patch
 
 %description
 The Audio File Library provides an elegant API for accessing a variety
@@ -42,6 +44,7 @@ of audio file formats, such as AIFF/AIFF-C, WAVE, and NeXT/Sun
 %package bin
 Summary: bin components for the audiofile package.
 Group: Binaries
+Requires: audiofile-license = %{version}-%{release}
 
 %description bin
 bin components for the audiofile package.
@@ -50,28 +53,47 @@ bin components for the audiofile package.
 %package dev
 Summary: dev components for the audiofile package.
 Group: Development
-Requires: audiofile-lib
-Requires: audiofile-bin
-Provides: audiofile-devel
+Requires: audiofile-lib = %{version}-%{release}
+Requires: audiofile-bin = %{version}-%{release}
+Provides: audiofile-devel = %{version}-%{release}
+Requires: audiofile = %{version}-%{release}
 
 %description dev
 dev components for the audiofile package.
 
 
-%package doc
-Summary: doc components for the audiofile package.
-Group: Documentation
-
-%description doc
-doc components for the audiofile package.
-
-
 %package lib
 Summary: lib components for the audiofile package.
 Group: Libraries
+Requires: audiofile-license = %{version}-%{release}
 
 %description lib
 lib components for the audiofile package.
+
+
+%package license
+Summary: license components for the audiofile package.
+Group: Default
+
+%description license
+license components for the audiofile package.
+
+
+%package man
+Summary: man components for the audiofile package.
+Group: Default
+
+%description man
+man components for the audiofile package.
+
+
+%package staticdev
+Summary: staticdev components for the audiofile package.
+Group: Default
+Requires: audiofile-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the audiofile package.
 
 
 %prep
@@ -85,19 +107,21 @@ lib components for the audiofile package.
 %patch7 -p1
 %patch15 -p1
 %patch17 -p1
+%patch18 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1507400543
-export CFLAGS="$CFLAGS -fstack-protector-strong "
-export FCFLAGS="$CFLAGS -fstack-protector-strong "
-export FFLAGS="$CFLAGS -fstack-protector-strong "
-export CXXFLAGS="$CXXFLAGS -fstack-protector-strong "
+export SOURCE_DATE_EPOCH=1556126132
+export LDFLAGS="${LDFLAGS} -fno-lto"
+export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 %configure
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 
 %check
 export LANG=C
@@ -107,8 +131,11 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1507400543
+export SOURCE_DATE_EPOCH=1556126132
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/audiofile
+cp COPYING %{buildroot}/usr/share/package-licenses/audiofile/COPYING
+cp COPYING.GPL %{buildroot}/usr/share/package-licenses/audiofile/COPYING.GPL
 %make_install
 
 %files
@@ -122,16 +149,55 @@ rm -rf %{buildroot}
 %files dev
 %defattr(-,root,root,-)
 /usr/include/*.h
-/usr/lib64/*.a
 /usr/lib64/libaudiofile.so
 /usr/lib64/pkgconfig/audiofile.pc
-
-%files doc
-%defattr(-,root,root,-)
-%doc /usr/share/man/man1/*
-%doc /usr/share/man/man3/*
+/usr/share/man/man3/afCloseFile.3
+/usr/share/man/man3/afGetDataOffset.3
+/usr/share/man/man3/afGetFrameCount.3
+/usr/share/man/man3/afGetFrameSize.3
+/usr/share/man/man3/afGetTrackBytes.3
+/usr/share/man/man3/afInitAESChannelData.3
+/usr/share/man/man3/afInitAESChannelDataTo.3
+/usr/share/man/man3/afInitByteOrder.3
+/usr/share/man/man3/afInitChannels.3
+/usr/share/man/man3/afInitCompression.3
+/usr/share/man/man3/afInitFileFormat.3
+/usr/share/man/man3/afInitRate.3
+/usr/share/man/man3/afInitSampleFormat.3
+/usr/share/man/man3/afNewFileSetup.3
+/usr/share/man/man3/afOpenFile.3
+/usr/share/man/man3/afQuery.3
+/usr/share/man/man3/afQueryDouble.3
+/usr/share/man/man3/afQueryLong.3
+/usr/share/man/man3/afQueryPointer.3
+/usr/share/man/man3/afReadFrames.3
+/usr/share/man/man3/afReadMisc.3
+/usr/share/man/man3/afSeekFrame.3
+/usr/share/man/man3/afSeekMisc.3
+/usr/share/man/man3/afSetErrorHandler.3
+/usr/share/man/man3/afSetVirtualByteOrder.3
+/usr/share/man/man3/afSetVirtualChannels.3
+/usr/share/man/man3/afSetVirtualPCMMapping.3
+/usr/share/man/man3/afSetVirtualSampleFormat.3
+/usr/share/man/man3/afTellFrame.3
+/usr/share/man/man3/afWriteFrames.3
+/usr/share/man/man3/afWriteMisc.3
 
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libaudiofile.so.1
 /usr/lib64/libaudiofile.so.1.0.0
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/audiofile/COPYING
+/usr/share/package-licenses/audiofile/COPYING.GPL
+
+%files man
+%defattr(0644,root,root,0755)
+/usr/share/man/man1/sfconvert.1
+/usr/share/man/man1/sfinfo.1
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/libaudiofile.a
