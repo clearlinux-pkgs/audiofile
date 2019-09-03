@@ -5,9 +5,9 @@
 %define keepstatic 1
 Name     : audiofile
 Version  : 0.3.6
-Release  : 11
-URL      : http://audiofile.68k.org/audiofile-0.3.6.tar.gz
-Source0  : http://audiofile.68k.org/audiofile-0.3.6.tar.gz
+Release  : 12
+URL      : https://audiofile.68k.org/audiofile-0.3.6.tar.gz
+Source0  : https://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Summary  : A library to handle various audio file formats.
 Group    : Development/Tools
 License  : GPL-2.0 LGPL-2.1
@@ -113,25 +113,25 @@ staticdev components for the audiofile package.
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1556126132
-export LDFLAGS="${LDFLAGS} -fno-lto"
-export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
-export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1567530442
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 %configure
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1556126132
+export SOURCE_DATE_EPOCH=1567530442
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/audiofile
 cp COPYING %{buildroot}/usr/share/package-licenses/audiofile/COPYING
