@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : audiofile
 Version  : 0.3.6
-Release  : 12
+Release  : 13
 URL      : https://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Source0  : https://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Summary  : A library to handle various audio file formats.
@@ -16,6 +16,7 @@ Requires: audiofile-lib = %{version}-%{release}
 Requires: audiofile-license = %{version}-%{release}
 Requires: audiofile-man = %{version}-%{release}
 BuildRequires : alsa-lib-dev
+BuildRequires : asciidoc
 BuildRequires : pkgconfig(flac)
 Patch1: 0001-Fix-type-of-test-data-arrays.patch
 Patch2: 0002-Fix-warnings-in-tests-comparing-integers-to-enums.patch
@@ -35,6 +36,7 @@ Patch15: cve-2017-6829.patch
 Patch16: cve-2017-6830.nopatch
 Patch17: cve-2017-6831.patch
 Patch18: CVE-2018-13440.patch
+Patch19: CVE-2015-7747.patch
 
 %description
 The Audio File Library provides an elegant API for accessing a variety
@@ -98,6 +100,7 @@ staticdev components for the audiofile package.
 
 %prep
 %setup -q -n audiofile-0.3.6
+cd %{_builddir}/audiofile-0.3.6
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -108,13 +111,14 @@ staticdev components for the audiofile package.
 %patch15 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1567530442
+export SOURCE_DATE_EPOCH=1582218767
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -131,11 +135,11 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1567530442
+export SOURCE_DATE_EPOCH=1582218767
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/audiofile
-cp COPYING %{buildroot}/usr/share/package-licenses/audiofile/COPYING
-cp COPYING.GPL %{buildroot}/usr/share/package-licenses/audiofile/COPYING.GPL
+cp %{_builddir}/audiofile-0.3.6/COPYING %{buildroot}/usr/share/package-licenses/audiofile/01a6b4bf79aca9b556822601186afab86e8c4fbf
+cp %{_builddir}/audiofile-0.3.6/COPYING.GPL %{buildroot}/usr/share/package-licenses/audiofile/4cc77b90af91e615a64ae04893fdffa7939db84c
 %make_install
 
 %files
@@ -148,7 +152,9 @@ cp COPYING.GPL %{buildroot}/usr/share/package-licenses/audiofile/COPYING.GPL
 
 %files dev
 %defattr(-,root,root,-)
-/usr/include/*.h
+/usr/include/af_vfs.h
+/usr/include/audiofile.h
+/usr/include/aupvlist.h
 /usr/lib64/libaudiofile.so
 /usr/lib64/pkgconfig/audiofile.pc
 /usr/share/man/man3/afCloseFile.3
@@ -190,8 +196,8 @@ cp COPYING.GPL %{buildroot}/usr/share/package-licenses/audiofile/COPYING.GPL
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/audiofile/COPYING
-/usr/share/package-licenses/audiofile/COPYING.GPL
+/usr/share/package-licenses/audiofile/01a6b4bf79aca9b556822601186afab86e8c4fbf
+/usr/share/package-licenses/audiofile/4cc77b90af91e615a64ae04893fdffa7939db84c
 
 %files man
 %defattr(0644,root,root,0755)
