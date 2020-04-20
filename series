@@ -6,15 +6,8 @@
 cve-2017-6837.patch
 cve-2017-6838.patch
 cve-2017-6839.patch
-cve-2017-6832.nopatch
-cve-2017-6833.nopatch
-cve-2017-6834.nopatch
-cve-2017-6835.nopatch
-cve-2017-6836.nopatch
-cve-2017-6827.nopatch
-cve-2017-6828.nopatch
 cve-2017-6829.patch
-cve-2017-6830.nopatch
 cve-2017-6831.patch
 CVE-2018-13440.patch
 CVE-2015-7747.patch
+CVE-2018-17095.patch

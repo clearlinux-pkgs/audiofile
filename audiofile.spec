@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : audiofile
 Version  : 0.3.6
-Release  : 13
+Release  : 14
 URL      : https://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Source0  : https://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Summary  : A library to handle various audio file formats.
@@ -25,18 +25,11 @@ Patch4: 0004-Fix-undefined-behavior-in-sign-conversion.patch
 Patch5: cve-2017-6837.patch
 Patch6: cve-2017-6838.patch
 Patch7: cve-2017-6839.patch
-Patch8: cve-2017-6832.nopatch
-Patch9: cve-2017-6833.nopatch
-Patch10: cve-2017-6834.nopatch
-Patch11: cve-2017-6835.nopatch
-Patch12: cve-2017-6836.nopatch
-Patch13: cve-2017-6827.nopatch
-Patch14: cve-2017-6828.nopatch
-Patch15: cve-2017-6829.patch
-Patch16: cve-2017-6830.nopatch
-Patch17: cve-2017-6831.patch
-Patch18: CVE-2018-13440.patch
-Patch19: CVE-2015-7747.patch
+Patch8: cve-2017-6829.patch
+Patch9: cve-2017-6831.patch
+Patch10: CVE-2018-13440.patch
+Patch11: CVE-2015-7747.patch
+Patch12: CVE-2018-17095.patch
 
 %description
 The Audio File Library provides an elegant API for accessing a variety
@@ -108,21 +101,22 @@ cd %{_builddir}/audiofile-0.3.6
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch15 -p1
-%patch17 -p1
-%patch18 -p1
-%patch19 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1582218767
+export SOURCE_DATE_EPOCH=1587425161
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FCFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 export CXXFLAGS="$CXXFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 %configure
 make  %{?_smp_mflags}
@@ -135,7 +129,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1582218767
+export SOURCE_DATE_EPOCH=1587425161
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/audiofile
 cp %{_builddir}/audiofile-0.3.6/COPYING %{buildroot}/usr/share/package-licenses/audiofile/01a6b4bf79aca9b556822601186afab86e8c4fbf
