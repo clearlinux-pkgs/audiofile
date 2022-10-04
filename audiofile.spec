@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : audiofile
 Version  : 0.3.6
-Release  : 18
+Release  : 19
 URL      : https://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Source0  : https://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Summary  : A library to handle various audio file formats.
@@ -112,7 +112,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1587425161
+export SOURCE_DATE_EPOCH=1664887431
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
 export FCFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
@@ -126,14 +126,14 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1587425161
+export SOURCE_DATE_EPOCH=1664887431
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/audiofile
-cp %{_builddir}/audiofile-0.3.6/COPYING %{buildroot}/usr/share/package-licenses/audiofile/01a6b4bf79aca9b556822601186afab86e8c4fbf
-cp %{_builddir}/audiofile-0.3.6/COPYING.GPL %{buildroot}/usr/share/package-licenses/audiofile/4cc77b90af91e615a64ae04893fdffa7939db84c
+cp %{_builddir}/audiofile-%{version}/COPYING %{buildroot}/usr/share/package-licenses/audiofile/01a6b4bf79aca9b556822601186afab86e8c4fbf || :
+cp %{_builddir}/audiofile-%{version}/COPYING.GPL %{buildroot}/usr/share/package-licenses/audiofile/4cc77b90af91e615a64ae04893fdffa7939db84c || :
 %make_install
 
 %files
