@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : audiofile
 Version  : 0.3.6
-Release  : 21
+Release  : 22
 URL      : https://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Source0  : https://audiofile.68k.org/audiofile-0.3.6.tar.gz
 Summary  : A library to handle various audio file formats.
